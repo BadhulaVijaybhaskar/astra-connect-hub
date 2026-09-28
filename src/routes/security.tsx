@@ -1,0 +1,6 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { Container, CtaBand, PageIntro, securityPoints } from "@/components/astra-pages";
+export const Route = createFileRoute("/security")({
+  head:()=>({meta:[{title:"Security — AstraConnect"},{name:"description",content:"Data boundaries, controlled access, credential protection and auditability for AstraConnect workspaces."},{property:"og:title",content:"Security — AstraConnect"},{property:"og:description",content:"A defensible security model for customer conversations and configured integrations."},{property:"og:type",content:"website"},{property:"og:url",content:"https://astraconnect.io/security"},{name:"twitter:card",content:"summary_large_image"}],links:[{rel:"canonical",href:"https://astraconnect.io/security"}]}),
+  component: () => <><PageIntro eyebrow="SECURITY" title="Your customer conversations, protected." lead="Calls, recordings and chats are sensitive. Here is how AstraConnect keeps them safe."/><Container className="grid gap-4 pb-20 sm:grid-cols-2 lg:grid-cols-4">{securityPoints.map(({ Icon, title, body }) => <div key={title} className="rounded-lg border border-border bg-card p-5"><Icon className="size-5 text-voice"/><h2 className="mt-3 font-bold">{title}</h2><p className="mt-1 text-sm text-muted-foreground">{body}</p></div>)}</Container><CtaBand/></>,
+});

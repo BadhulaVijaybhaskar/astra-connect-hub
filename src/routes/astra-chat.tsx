@@ -1,0 +1,13 @@
+﻿import { createFileRoute } from "@tanstack/react-router";
+import { ArrowRight } from "lucide-react";
+import { motion } from "motion/react";
+import { ChatWorkspace, DemoDialog, OutcomeCharts } from "@/components/astra-site";
+import { Button } from "@/components/ui/button";
+import { ChatCapabilityStudio, ChatOperations, ConnectedChatStory, FinalProductCta } from "@/components/astra-quality";
+
+export const Route = createFileRoute("/astra-chat")({
+  head:()=>({meta:[{title:"Astra Chat â€” WhatsApp CRM for Sales Teams"},{name:"description",content:"Manage WhatsApp conversations, customer details, and sales follow-ups in one team workspace."},{property:"og:title",content:"Astra Chat â€” Every chat. The full picture."},{property:"og:description",content:"A dedicated WhatsApp CRM that keeps every conversation connected to the sales pipeline."},{property:"og:type",content:"product"},{property:"og:url",content:"https://astraconnect.io/astra-chat"},{name:"twitter:card",content:"summary_large_image"}],links:[{rel:"canonical",href:"https://astraconnect.io/astra-chat"}]}),
+  component: ChatPage,
+});
+
+function ChatPage(){return <><section className="site-container pb-20 pt-16"><div className="grid items-center gap-8 lg:grid-cols-[.72fr_1.28fr]"><motion.div initial={{opacity:0,y:14}} animate={{opacity:1,y:0}}><p className="eyebrow text-chat-dark">ASTRA CHAT</p><h1 className="page-title mt-4 text-balance">Every chat.<br/>The full picture.</h1><p className="mt-5 max-w-2xl text-pretty text-lg leading-relaxed text-muted-foreground">Manage WhatsApp conversations, customer details and sales follow-ups in one team workspace.</p><p className="mt-3 max-w-2xl text-sm text-muted-foreground">Use Astra Chat independently. Connect Astra Voice when you need it.</p><DemoDialog><Button size="lg" className="mt-8 bg-chat hover:bg-chat/90">Explore Astra Chat <ArrowRight/></Button></DemoDialog></motion.div><div className="rounded-lg border border-chat/30 bg-chat-soft p-5 shadow-panel"><p className="eyebrow text-chat-dark">LIVE CUSTOMER CONTEXT Â· ILLUSTRATIVE DEMO</p><div className="mt-5 grid gap-3 sm:grid-cols-2"><div className="rounded-md bg-card p-4"><b>Arjun Mehta</b><p className="mt-1 text-sm text-muted-foreground">New WhatsApp enquiry</p></div><div className="rounded-md bg-card p-4"><b>Qualified</b><p className="mt-1 text-sm text-muted-foreground">Owner Â· Ananya</p></div></div></div></div><div className="mt-10" data-guide="Keep customer conversations, context and follow-ups together." data-guide-tone="chat"><ChatWorkspace/></div></section><ChatCapabilityStudio/><ChatOperations/><ConnectedChatStory/><OutcomeCharts accent="chat"/><FinalProductCta product="chat"/></>}

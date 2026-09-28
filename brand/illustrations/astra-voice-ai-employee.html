@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Astra Voice — AI Employee illustration</title>
+<style>
+  :root {
+    --bg: #f7f8fb;
+    --surface: #ffffff;
+    --ink: #0f1729;
+    --muted: #64708b;
+    --line: #e6eaf2;
+    --voice: #2f6bff;
+    --voice-soft: #edf3ff;
+    --voice-deeper: #1d4ed8;
+    --ok: #0d9488;
+    --shadow: 0 18px 40px rgba(15, 23, 41, 0.06);
+    --shadow-sm: 0 8px 20px rgba(15, 23, 41, 0.04);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1920px; height: 1080px; overflow: hidden;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .canvas {
+    width: 1920px; height: 1080px;
+    padding: 48px 56px 44px;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    gap: 28px;
+    background:
+      radial-gradient(circle at 18% 12%, rgba(47,107,255,.07), transparent 28%),
+      radial-gradient(circle at 88% 78%, rgba(47,107,255,.05), transparent 26%),
+      var(--bg);
+  }
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .brand {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .brand-mark {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: linear-gradient(145deg, #3b82f6, #1d4ed8);
+    display: grid; place-items: center; color: white; font-weight: 800; font-size: 13px;
+    letter-spacing: -0.04em;
+  }
+  .brand b { font-size: 18px; letter-spacing: -0.02em; }
+  .brand span { display: block; font-size: 12px; color: var(--muted); font-weight: 500; margin-top: 1px; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    border: 1px solid var(--line); background: var(--surface);
+    border-radius: 999px; padding: 8px 14px; font-size: 12px; font-weight: 600;
+    color: var(--muted); box-shadow: var(--shadow-sm);
+  }
+  .badge i { width: 7px; height: 7px; border-radius: 50%; background: var(--voice); display: inline-block; }
+  .stage {
+    display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end;
+  }
+  .stage span {
+    font-size: 11px; font-weight: 650; color: var(--muted);
+    border: 1px solid var(--line); background: rgba(255,255,255,.7);
+    border-radius: 999px; padding: 7px 11px;
+  }
+  .stage span.on { color: var(--voice-deeper); border-color: rgba(47,107,255,.28); background: var(--voice-soft); }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1.05fr 1.05fr .95fr;
+    gap: 22px;
+    min-height: 0;
+    align-items: stretch;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+    padding: 22px;
+    display: flex; flex-direction: column; min-height: 0;
+    position: relative;
+  }
+  .eyebrow {
+    font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted);
+  }
+  .eyebrow.blue { color: var(--voice); }
+
+  .emp-head {
+    display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center;
+    padding-bottom: 18px; border-bottom: 1px solid var(--line);
+  }
+  .avatar {
+    width: 52px; height: 52px; border-radius: 16px;
+    background: var(--voice-soft); color: var(--voice-deeper);
+    display: grid; place-items: center; font-weight: 800; font-size: 18px;
+    border: 1px solid rgba(47,107,255,.18);
+  }
+  .emp-head h1 { font-size: 26px; letter-spacing: -0.03em; line-height: 1.1; }
+  .emp-head p { margin-top: 4px; color: var(--muted); font-size: 14px; font-weight: 500; }
+  .ready {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0;
+    border-radius: 999px; padding: 8px 12px; font-size: 12px; font-weight: 700;
+  }
+  .ready i { width: 8px; height: 8px; border-radius: 50%; background: #10b981; }
+
+  .blocks { display: grid; gap: 12px; margin-top: 16px; }
+  .block {
+    border: 1px solid var(--line); border-radius: 14px; padding: 13px 14px; background: #fbfcfe;
+  }
+  .block .k { font-size: 10px; font-weight: 750; letter-spacing: .12em; color: var(--muted); }
+  .block .v { margin-top: 6px; font-size: 14px; font-weight: 600; line-height: 1.35; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .chip {
+    border: 1px solid var(--line); background: white; border-radius: 999px;
+    padding: 7px 12px; font-size: 12px; font-weight: 650; color: var(--muted);
+  }
+  .chip.sel {
+    background: var(--voice); color: white; border-color: var(--voice);
+    box-shadow: 0 8px 18px rgba(47,107,255,.25);
+  }
+  .knowledge { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+  .knowledge span {
+    font-size: 12px; font-weight: 600; color: var(--ink);
+    background: white; border: 1px solid var(--line); border-radius: 10px; padding: 9px 10px;
+  }
+
+  .call-head {
+    display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;
+    padding-bottom: 16px; border-bottom: 1px solid var(--line);
+  }
+  .call-head h2 { font-size: 22px; letter-spacing: -0.02em; margin-top: 4px; }
+  .meta { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+  .pill {
+    border-radius: 999px; padding: 7px 11px; font-size: 12px; font-weight: 700;
+    border: 1px solid rgba(47,107,255,.2); background: var(--voice-soft); color: var(--voice-deeper);
+  }
+  .pill.dark { background: #0f1729; color: white; border-color: #0f1729; }
+
+  .wave {
+    margin: 16px 0 14px; height: 42px; display: flex; align-items: center; gap: 3px;
+    padding: 8px 12px; border-radius: 12px; background: var(--voice-soft); border: 1px solid rgba(47,107,255,.12);
+  }
+  .wave b { height: 100%; width: 3px; border-radius: 99px; background: var(--voice); opacity: .85; display: block; }
+
+  .thread { display: grid; gap: 10px; flex: 1; min-height: 0; }
+  .msg {
+    max-width: 92%; border-radius: 14px; padding: 12px 14px; font-size: 14px; line-height: 1.45;
+    border: 1px solid var(--line); background: #f8fafc;
+  }
+  .msg.maya { background: var(--voice-soft); border-color: rgba(47,107,255,.18); }
+  .msg.arjun { margin-left: auto; background: white; }
+  .msg .who { font-size: 11px; font-weight: 750; color: var(--voice); margin-bottom: 4px; letter-spacing: .04em; }
+  .msg.arjun .who { color: var(--muted); }
+  .msg .hi { background: rgba(47,107,255,.14); color: var(--voice-deeper); border-radius: 5px; padding: 1px 5px; font-weight: 700; }
+  .lang-note {
+    margin-top: 12px; font-size: 12px; color: var(--muted); font-weight: 550;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .lang-note em {
+    font-style: normal; color: var(--voice-deeper); background: var(--voice-soft);
+    border-radius: 999px; padding: 4px 9px; font-weight: 700; font-size: 11px;
+  }
+
+  .outcome-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+  .flow {
+    display: grid; grid-template-columns: repeat(4, auto); gap: 6px; align-items: center;
+    margin-bottom: 16px; font-size: 10px; font-weight: 750; letter-spacing: .06em; color: var(--muted); text-transform: uppercase;
+  }
+  .flow b { color: var(--voice-deeper); }
+  .flow i { width: 18px; height: 1px; background: rgba(47,107,255,.45); display: inline-block; }
+
+  .fields { display: grid; gap: 10px; }
+  .field {
+    border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; background: #fbfcfe;
+    position: relative;
+  }
+  .field.accent { border-color: rgba(47,107,255,.35); background: var(--voice-soft); box-shadow: inset 0 0 0 1px rgba(47,107,255,.05); }
+  .field .label { font-size: 10px; font-weight: 750; letter-spacing: .12em; color: var(--muted); }
+  .field .value { margin-top: 5px; font-size: 16px; font-weight: 700; letter-spacing: -0.02em; }
+  .field .from {
+    margin-top: 6px; font-size: 11px; color: var(--voice); font-weight: 650;
+  }
+  .status-row {
+    margin-top: 14px; display: grid; gap: 10px;
+  }
+  .status {
+    border-radius: 14px; padding: 14px; border: 1px solid #a7f3d0; background: #ecfdf5;
+  }
+  .status .label { font-size: 10px; font-weight: 750; letter-spacing: .12em; color: #047857; }
+  .status .value { margin-top: 4px; font-size: 18px; font-weight: 800; color: #065f46; }
+  .next {
+    border-radius: 14px; padding: 14px; border: 1px solid rgba(47,107,255,.28); background: var(--voice-soft);
+  }
+  .next .label { font-size: 10px; font-weight: 750; letter-spacing: .12em; color: var(--voice); }
+  .next .value { margin-top: 4px; font-size: 16px; font-weight: 750; color: var(--voice-deeper); }
+
+  .connectors {
+    position: absolute; inset: 0; pointer-events: none; z-index: 2;
+  }
+</style>
+</head>
+<body>
+  <div class="canvas">
+    <div class="topbar">
+      <div class="brand">
+        <div class="brand-mark">AV</div>
+        <div>
+          <b>Astra Voice</b>
+          <span>AI Employees for business calls</span>
+        </div>
+      </div>
+      <div class="stage">
+        <span class="on">Create AI Employee</span>
+        <span class="on">Teach the job</span>
+        <span class="on">Voice & language</span>
+        <span class="on">Connect customers</span>
+        <span class="on">Conversation</span>
+        <span class="on">Structured result</span>
+        <span class="on">Next action</span>
+      </div>
+      <div class="badge"><i></i> ILLUSTRATIVE DEMO</div>
+    </div>
+
+    <div class="grid">
+      <!-- LEFT: Employee workspace -->
+      <article class="card">
+        <div class="emp-head">
+          <div class="avatar">M</div>
+          <div>
+            <p class="eyebrow blue">AI EMPLOYEE</p>
+            <h1>Maya</h1>
+            <p>Lead Qualification</p>
+          </div>
+          <div class="ready"><i></i> Ready</div>
+        </div>
+
+        <div class="blocks">
+          <div class="block">
+            <div class="k">JOB</div>
+            <div class="v">Qualify new enquiries</div>
+          </div>
+          <div class="block">
+            <div class="k">INSTRUCTIONS</div>
+            <div class="v">Understand the customer's requirement and identify the next step.</div>
+          </div>
+          <div class="block">
+            <div class="k">KNOWLEDGE</div>
+            <div class="knowledge">
+              <span>Business information</span>
+              <span>FAQs</span>
+              <span>Product details</span>
+              <span>Qualification rules</span>
+            </div>
+          </div>
+          <div class="block">
+            <div class="k">VOICE</div>
+            <div class="v">Warm · Natural · Indian English</div>
+          </div>
+          <div class="block">
+            <div class="k">LANGUAGE</div>
+            <div class="v">Regional language ready</div>
+            <div class="chips">
+              <span class="chip">English</span>
+              <span class="chip">Hindi</span>
+              <span class="chip sel">Telugu</span>
+              <span class="chip">Tamil</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- MIDDLE: Live call -->
+      <article class="card">
+        <div class="call-head">
+          <div>
+            <p class="eyebrow blue">LIVE CALL</p>
+            <h2>Arjun Mehta</h2>
+            <p style="margin-top:6px;color:var(--muted);font-size:13px;font-weight:500;">New enquiry · Product demo</p>
+          </div>
+          <div class="meta">
+            <span class="pill">Connected</span>
+            <span class="pill dark">02:18</span>
+          </div>
+        </div>
+
+        <div class="wave" aria-hidden="true">
+          <b style="height:28%"></b><b style="height:54%"></b><b style="height:78%"></b><b style="height:42%"></b>
+          <b style="height:90%"></b><b style="height:62%"></b><b style="height:36%"></b><b style="height:70%"></b>
+          <b style="height:48%"></b><b style="height:84%"></b><b style="height:58%"></b><b style="height:34%"></b>
+          <b style="height:76%"></b><b style="height:50%"></b><b style="height:66%"></b><b style="height:40%"></b>
+          <b style="height:88%"></b><b style="height:52%"></b><b style="height:30%"></b><b style="height:72%"></b>
+          <b style="height:46%"></b><b style="height:80%"></b><b style="height:56%"></b><b style="height:38%"></b>
+          <b style="height:68%"></b><b style="height:44%"></b><b style="height:82%"></b><b style="height:60%"></b>
+        </div>
+
+        <div class="thread">
+          <div class="msg maya">
+            <div class="who">MAYA</div>
+            Hello Arjun, I’m calling regarding your enquiry.
+          </div>
+          <div class="msg maya">
+            <div class="who">MAYA · TELUGU</div>
+            మీకు తెలుగు లో మాట్లాడటం సౌకర్యంగా ఉంటుందా?
+          </div>
+          <div class="msg arjun">
+            <div class="who">ARJUN</div>
+            Yes, <span class="hi">Telugu</span> is fine.
+          </div>
+          <div class="msg maya">
+            <div class="who">MAYA · TELUGU</div>
+            సరే. మీకు ఏ విషయం గురించి సమాచారం కావాలి?
+          </div>
+          <div class="msg arjun">
+            <div class="who">ARJUN</div>
+            We need a <span class="hi">product demo</span> for our <span class="hi">sales team</span> — <span class="hi">this week</span> works.
+          </div>
+        </div>
+        <div class="lang-note"><em>Regional language</em> Conversation continues in Telugu + English</div>
+      </article>
+
+      <!-- RIGHT: Structured outcome -->
+      <article class="card">
+        <div class="outcome-head">
+          <div>
+            <p class="eyebrow blue">STRUCTURED OUTCOME</p>
+            <h2 style="font-size:22px;letter-spacing:-0.02em;margin-top:4px;">Customer context</h2>
+          </div>
+        </div>
+        <div class="flow">
+          <b>Conversation</b><i></i>
+          <span>Understanding</span><i></i>
+          <span>Outcome</span><i></i>
+          <span>Next action</span>
+        </div>
+        <div class="fields">
+          <div class="field accent">
+            <div class="label">INTEREST</div>
+            <div class="value">Product demo</div>
+            <div class="from">from “product demo”</div>
+          </div>
+          <div class="field accent">
+            <div class="label">TEAM</div>
+            <div class="value">Sales</div>
+            <div class="from">from “sales team”</div>
+          </div>
+          <div class="field accent">
+            <div class="label">TIMING</div>
+            <div class="value">This week</div>
+            <div class="from">from “this week”</div>
+          </div>
+        </div>
+        <div class="status-row">
+          <div class="status">
+            <div class="label">STATUS</div>
+            <div class="value">Qualified</div>
+          </div>
+          <div class="next">
+            <div class="label">NEXT ACTION</div>
+            <div class="value">Schedule sales follow-up</div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</body>
+</html>
