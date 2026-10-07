@@ -1,4 +1,4 @@
-﻿import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
   Link,
@@ -15,6 +15,7 @@ import { Footer, SiteHeader } from "../components/astra-site";
 import { CursorGuide } from "@/components/astra-guide";
 import { AstraMotionLayer } from "../components/astra-motion-layer";
 import { Button } from "../components/ui/button";
+import { Mascot } from "page-mascot";
 
 function NotFoundComponent() {
   return (
@@ -134,6 +135,7 @@ function RootComponent() {
       <SiteHeader />
       <main className="guide-safe relative"><Outlet /></main>
       <Footer />
+      <Mascot directions="/mascots/glasses-directions.webp" reactions="/mascots/glasses-reactions.webp" />
       <CursorGuide />
     </QueryClientProvider>
   );
