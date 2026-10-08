@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppRouteImport } from './routes/app'
 import { Route as AstraChatRouteImport } from './routes/astra-chat'
 import { Route as AstraVoiceRouteImport } from './routes/astra-voice'
 import { Route as BookDemoRouteImport } from './routes/book-demo'
@@ -18,12 +19,21 @@ import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as SecurityRouteImport } from './routes/security'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as AppIndexRouteImport } from './routes/app.index'
 import { Route as SolutionsIndexRouteImport } from './routes/solutions.index'
 import { Route as SolutionsSlugRouteImport } from './routes/solutions.$slug'
+import { Route as AppEmployeesIndexRouteImport } from './routes/app.employees.index'
+import { Route as AppEmployeesEmployeeIdRouteImport } from './routes/app.employees.$employeeId'
+import { Route as AppEmployeesNewRouteImport } from './routes/app.employees.new'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppRoute = AppRouteImport.update({
+  id: '/app',
+  path: '/app',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AstraChatRoute = AstraChatRouteImport.update({
@@ -66,6 +76,11 @@ const TermsRoute = TermsRouteImport.update({
   path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppIndexRoute = AppIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppRoute,
+} as any)
 const SolutionsIndexRoute = SolutionsIndexRouteImport.update({
   id: '/solutions/',
   path: '/solutions/',
@@ -76,9 +91,25 @@ const SolutionsSlugRoute = SolutionsSlugRouteImport.update({
   path: '/solutions/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppEmployeesIndexRoute = AppEmployeesIndexRouteImport.update({
+  id: '/employees/',
+  path: '/employees/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppEmployeesEmployeeIdRoute = AppEmployeesEmployeeIdRouteImport.update({
+  id: '/employees/$employeeId',
+  path: '/employees/$employeeId',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppEmployeesNewRoute = AppEmployeesNewRouteImport.update({
+  id: '/employees/new',
+  path: '/employees/new',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/app': typeof AppRouteWithChildren
   '/astra-chat': typeof AstraChatRoute
   '/astra-voice': typeof AstraVoiceRoute
   '/book-demo': typeof BookDemoRoute
@@ -88,7 +119,11 @@ export interface FileRoutesByFullPath {
   '/security': typeof SecurityRoute
   '/terms': typeof TermsRoute
   '/solutions/$slug': typeof SolutionsSlugRoute
+  '/app/': typeof AppIndexRoute
   '/solutions/': typeof SolutionsIndexRoute
+  '/app/employees/$employeeId': typeof AppEmployeesEmployeeIdRoute
+  '/app/employees/new': typeof AppEmployeesNewRoute
+  '/app/employees/': typeof AppEmployeesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -101,11 +136,16 @@ export interface FileRoutesByTo {
   '/security': typeof SecurityRoute
   '/terms': typeof TermsRoute
   '/solutions/$slug': typeof SolutionsSlugRoute
+  '/app': typeof AppIndexRoute
   '/solutions': typeof SolutionsIndexRoute
+  '/app/employees/$employeeId': typeof AppEmployeesEmployeeIdRoute
+  '/app/employees/new': typeof AppEmployeesNewRoute
+  '/app/employees': typeof AppEmployeesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/app': typeof AppRouteWithChildren
   '/astra-chat': typeof AstraChatRoute
   '/astra-voice': typeof AstraVoiceRoute
   '/book-demo': typeof BookDemoRoute
@@ -115,12 +155,17 @@ export interface FileRoutesById {
   '/security': typeof SecurityRoute
   '/terms': typeof TermsRoute
   '/solutions/$slug': typeof SolutionsSlugRoute
+  '/app/': typeof AppIndexRoute
   '/solutions/': typeof SolutionsIndexRoute
+  '/app/employees/$employeeId': typeof AppEmployeesEmployeeIdRoute
+  '/app/employees/new': typeof AppEmployeesNewRoute
+  '/app/employees/': typeof AppEmployeesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/app'
     | '/astra-chat'
     | '/astra-voice'
     | '/book-demo'
@@ -130,7 +175,11 @@ export interface FileRouteTypes {
     | '/security'
     | '/terms'
     | '/solutions/$slug'
+    | '/app/'
     | '/solutions/'
+    | '/app/employees/$employeeId'
+    | '/app/employees/new'
+    | '/app/employees/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -143,10 +192,15 @@ export interface FileRouteTypes {
     | '/security'
     | '/terms'
     | '/solutions/$slug'
+    | '/app'
     | '/solutions'
+    | '/app/employees/$employeeId'
+    | '/app/employees/new'
+    | '/app/employees'
   id:
     | '__root__'
     | '/'
+    | '/app'
     | '/astra-chat'
     | '/astra-voice'
     | '/book-demo'
@@ -156,11 +210,16 @@ export interface FileRouteTypes {
     | '/security'
     | '/terms'
     | '/solutions/$slug'
+    | '/app/'
     | '/solutions/'
+    | '/app/employees/$employeeId'
+    | '/app/employees/new'
+    | '/app/employees/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AppRoute: typeof AppRouteWithChildren
   AstraChatRoute: typeof AstraChatRoute
   AstraVoiceRoute: typeof AstraVoiceRoute
   BookDemoRoute: typeof BookDemoRoute
@@ -180,6 +239,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/astra-chat': {
@@ -238,6 +304,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/app/': {
+      id: '/app/'
+      path: '/'
+      fullPath: '/app/'
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/solutions/': {
       id: '/solutions/'
       path: '/solutions'
@@ -252,11 +325,49 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SolutionsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/app/employees/': {
+      id: '/app/employees/'
+      path: '/employees'
+      fullPath: '/app/employees/'
+      preLoaderRoute: typeof AppEmployeesIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/employees/$employeeId': {
+      id: '/app/employees/$employeeId'
+      path: '/employees/$employeeId'
+      fullPath: '/app/employees/$employeeId'
+      preLoaderRoute: typeof AppEmployeesEmployeeIdRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/employees/new': {
+      id: '/app/employees/new'
+      path: '/employees/new'
+      fullPath: '/app/employees/new'
+      preLoaderRoute: typeof AppEmployeesNewRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
+interface AppRouteChildren {
+  AppIndexRoute: typeof AppIndexRoute
+  AppEmployeesEmployeeIdRoute: typeof AppEmployeesEmployeeIdRoute
+  AppEmployeesNewRoute: typeof AppEmployeesNewRoute
+  AppEmployeesIndexRoute: typeof AppEmployeesIndexRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppIndexRoute: AppIndexRoute,
+  AppEmployeesEmployeeIdRoute: AppEmployeesEmployeeIdRoute,
+  AppEmployeesNewRoute: AppEmployeesNewRoute,
+  AppEmployeesIndexRoute: AppEmployeesIndexRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AppRoute: AppRouteWithChildren,
   AstraChatRoute: AstraChatRoute,
   AstraVoiceRoute: AstraVoiceRoute,
   BookDemoRoute: BookDemoRoute,
